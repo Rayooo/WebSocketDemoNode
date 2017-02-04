@@ -1,0 +1,23 @@
+{
+  "name": "websocketdemo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rayooo/WebSocketDemoNode.git"
+  },
+  "author": "Ray",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rayooo/WebSocketDemoNode/issues"
+  },
+  "homepage": "https://github.com/Rayooo/WebSocketDemoNode#readme",
+  "dependencies": {
+    "express": "^4.14.1",
+    "socket.io": "^1.7.2"
+  }
+}
