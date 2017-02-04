@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<ul id="vue">
+    <li v-for="user in userList">
+        {{ user.name }}
+    </li>
+</ul>
+
+
+<script src="socket.io.js"></script>
+<script src="//cdn.bootcss.com/vue/2.1.10/vue.js"></script>
+<script>
+
+
+    var app = new Vue({
+        el: '#vue',
+        data: {
+            userList: [
+            ]
+        },
+        beforeCreate:function () {
+            var socket = io.connect('http://localhost:3000');
+            var name = prompt("Enter your name : ", "your name here");
+            socket.emit('name',{name: name});
+
+            socket.on("userList",function (data) {
+                app.userList = data;
+            })
+
+        }
+    })
+
+</script>
+
+</body>
+</html>
