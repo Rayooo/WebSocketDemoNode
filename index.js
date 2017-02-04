@@ -22,6 +22,7 @@ io.on('connection', function (socket) {
             name:data.name,
             id:socket.id
         });
+        socket.broadcast.emit('refresh',userList);
         console.log(userList);
     });
 
@@ -34,4 +35,8 @@ io.on('connection', function (socket) {
         console.log(userList);
 
     });
+
+    socket.on("sendMessage", function (data) {
+        io.to(data.who).emit('getMessage',data);
+    })
 });

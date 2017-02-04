@@ -7,9 +7,19 @@
 <body>
 
 <ul id="vue">
-    <li v-for="user in userList">
-        {{ user.name }}
+    当前用户:{{myName}}
+    <li v-for="user in userList" v-if="isShow">
+        <button v-on:click="talk(user)">{{ user.name }}</button>
     </li>
+
+    <li v-for="message in messageList" v-if="!isShow">
+        {{message.from}}:{{message.message}}
+    </li>
+    <div v-if="!isShow">
+        <input  v-model="words">
+        <button v-on:click="send">发送</button>
+    </div>
+
 </ul>
 
 
@@ -17,19 +27,23 @@
 <script src="//cdn.bootcss.com/vue/2.1.10/vue.js"></script>
 <script>
 
-
+    var socket;
     var app = new Vue({
         el: '#vue',
         data: {
-            userList: [
-            ]
+            myName:"",
+            userList: [],
+            isShow:true,
+            messageList: [],
+            who:{},
+            words:""
         },
         beforeCreate:function () {
-            var socket = io.connect('http://localhost:3000');
+            socket = io.connect('http://localhost:3000');
             var name = prompt("Enter your name : ", "your name here");
             socket.emit('name',{name: name});
-
             socket.on("userList",function (data) {
+                app.myName = name;
                 app.userList = data;
             });
 
@@ -37,6 +51,24 @@
                 socket.emit('disconnect',{id: socket.id});
             });
 
+            socket.on("getMessage",function (data) {
+                app.messageList.push(data);
+            })
+
+            socket.on("refresh",function (data) {
+                app.userList = data;
+            })
+        },
+        methods:{
+            talk:function (user) {
+                app.who = user;
+                app.isShow = false;
+            },
+            send:function () {
+                socket.emit("sendMessage",{who:app.who.id,message:app.words,from: app.myName});
+                app.messageList.push({who:app.who.id,message:app.words,from: app.myName});
+                app.words = "";
+            }
         }
     })
 
