@@ -31,7 +31,11 @@
 
             socket.on("userList",function (data) {
                 app.userList = data;
-            })
+            });
+
+            socket.on('disconnect', function(){
+                socket.emit('disconnect',{id: socket.id});
+            });
 
         }
     })

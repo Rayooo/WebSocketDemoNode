@@ -23,6 +23,15 @@ io.on('connection', function (socket) {
             id:socket.id
         });
         console.log(userList);
-    })
+    });
 
+    socket.on('disconnect', function(data){
+        for(var i = userList.length - 1; i >= 0; i--) {
+            if(userList[i].id === socket.id) {
+                userList.splice(i, 1);
+            }
+        }
+        console.log(userList);
+
+    });
 });
